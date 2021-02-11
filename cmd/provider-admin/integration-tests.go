@@ -21,7 +21,7 @@ import (
 	"github.com/ConsenSys/fc-retrieval-gateway/pkg/fcrcrypto"
 	log "github.com/ConsenSys/fc-retrieval-gateway/pkg/logging"
 
-	"github.com/ConsenSys/fc-retrieval-gateway-admin/pkg/fcrgatewayadmin"
+	"github.com/ConsenSys/fc-retrieval-provider-admin/pkg/fcrprovideradmin"
 )
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 
 func integrationTests() {
 	// TODO switch this to log.Test when available
-	log.Error(" Wait two seconds for the gateway to deploy and be ready for requests")
+	log.Error(" Wait two seconds for the provider to deploy and be ready for requests")
 	time.Sleep(2 * time.Second)
 
 	blockchainPrivateKey, err := fcrcrypto.GenerateBlockchainKeyPair()
@@ -42,11 +42,11 @@ func integrationTests() {
 		log.ErrorAndPanic(err.Error())
 	}
 
-	confBuilder := fcrgatewayadmin.CreateSettings()
+	confBuilder := fcrprovideradmin.CreateSettings()
 	confBuilder.SetEstablishmentTTL(101)
 	confBuilder.SetBlockchainPrivateKey(blockchainPrivateKey)
 	conf := confBuilder.Build()
 
-	client := fcrgatewayadmin.InitFilecoinRetrievalGatewayAdminClient(*conf)
+	client := fcrprovideradmin.InitFilecoinRetrievalProviderAdminClient(*conf)
 	client.Shutdown()
 }

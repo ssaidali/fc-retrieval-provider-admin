@@ -1,4 +1,4 @@
-package fcrgatewayadmin
+package fcrprovideradmin
 
 // Copyright (C) 2020 ConsenSys Software Inc
 
@@ -8,7 +8,7 @@ import (
 	"github.com/ConsenSys/fc-retrieval-gateway/pkg/fcrcrypto"
 	"github.com/ConsenSys/fc-retrieval-gateway/pkg/nodeid"
 
-	"github.com/ConsenSys/fc-retrieval-gateway-admin/internal/settings"
+	"github.com/ConsenSys/fc-retrieval-provider-admin/internal/settings"
 )
 
 // SettingsBuilder holds the library configuration
@@ -16,7 +16,7 @@ type SettingsBuilder interface {
 	// SetLogging sets the log level and target.
 	SetLogging(logLevel string, logTarget string)
 
-	// SetEstablishmentTTL sets the time to live for the establishment message between client and gateway.
+	// SetEstablishmentTTL sets the time to live for the establishment message between client and provider.
 	SetEstablishmentTTL(ttl int64)
 
 	// SetBlockchainPrivateKey sets the blockchain private key.
@@ -60,7 +60,7 @@ func (f settingsBuilderImpl) SetLogging(logLevel string, logTarget string) {
 	f.impl.SetLogging(logLevel, logTarget)
 }
 
-// SetEstablishmentTTL sets the time to live for the establishment message between client and gateway.
+// SetEstablishmentTTL sets the time to live for the establishment message between client and provider.
 func (f settingsBuilderImpl) SetEstablishmentTTL(ttl int64) {
 	f.impl.SetEstablishmentTTL(ttl)
 }

@@ -18,8 +18,8 @@ package fcrprovideradmin
 import (
 	"github.com/ConsenSys/fc-retrieval-provider-admin/internal/control"
 	"github.com/ConsenSys/fc-retrieval-provider-admin/internal/settings"
-	log "github.com/ConsenSys/fc-retrieval-provider/pkg/logging"
-	"github.com/ConsenSys/fc-retrieval-provider/pkg/nodeid"
+	log "github.com/ConsenSys/fc-retrieval-gateway/pkg/logging"
+	// "github.com/ConsenSys/fc-retrieval-gateway/pkg/nodeid"
 )
 
 // FilecoinRetrievalProviderAdminClient holds information about the interaction of
@@ -56,8 +56,8 @@ func GetFilecoinRetrievalProviderAdminClient() *FilecoinRetrievalProviderAdminCl
 
 func (c *FilecoinRetrievalProviderAdminClient) startUp(conf Settings) {
 	log.Info("Filecoin Retrieval Provider Admin Client started")
-	clientSettings := conf.(*settings.ClientProviderAdminSettings)
-	c.providerManager = control.GetProviderManager(*clientSettings)
+	clientSettings := conf.(*settings.ClientSettings)
+	c.providerManager = control.NewProviderManager(*clientSettings)
 }
 
 // Shutdown releases all resources used by the library
