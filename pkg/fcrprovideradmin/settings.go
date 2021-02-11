@@ -25,6 +25,9 @@ type SettingsBuilder interface {
 	// SetRetrievalPrivateKey sets the retrieval private key.
 	SetRetrievalPrivateKey(rPkey *fcrcrypto.KeyPair, ver *fcrcrypto.KeyVersion)
 
+	// SetRegisterURL sets the register URL.
+	SetRegisterURL(url string)
+
 	// Build creates a settings object and initialises the logging system.
 	Build() *Settings
 }
@@ -38,6 +41,8 @@ type Settings interface {
 
 	RetrievalPrivateKey() *fcrcrypto.KeyPair
 	RetrievalPrivateKeyVer() *fcrcrypto.KeyVersion
+
+	RegisterURL() string
 }
 
 // CreateSettings loads up default settings
@@ -73,6 +78,11 @@ func (f settingsBuilderImpl) SetBlockchainPrivateKey(bcPkey *fcrcrypto.KeyPair) 
 // SetRetrievalPrivateKey sets the retrieval private key.
 func (f settingsBuilderImpl) SetRetrievalPrivateKey(rPkey *fcrcrypto.KeyPair, ver *fcrcrypto.KeyVersion) {
 	f.impl.SetRetrievalPrivateKey(rPkey, ver)
+}
+
+// SetRegisterURL sets the register URL.
+func (f settingsBuilderImpl) SetRegisterURL(url string) {
+	f.impl.SetRegisterURL(url)
 }
 
 // Build generates the settings.

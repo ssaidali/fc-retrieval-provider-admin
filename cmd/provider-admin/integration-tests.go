@@ -45,6 +45,7 @@ func integrationTests() {
 	confBuilder := fcrprovideradmin.CreateSettings()
 	confBuilder.SetEstablishmentTTL(101)
 	confBuilder.SetBlockchainPrivateKey(blockchainPrivateKey)
+	confBuilder.SetRegisterURL("http://localhost:9020")
 	conf := confBuilder.Build()
 
 	client := fcrprovideradmin.InitFilecoinRetrievalProviderAdminClient(*conf)
