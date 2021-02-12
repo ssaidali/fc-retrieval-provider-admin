@@ -24,6 +24,7 @@ import (
 	// "github.com/ConsenSys/fc-retrieval-gateway/pkg/fcrcrypto"
 	"github.com/ConsenSys/fc-retrieval-gateway/pkg/logging"
 	"github.com/ConsenSys/fc-retrieval-register/pkg/register"
+	"github.com/ConsenSys/fc-retrieval-gateway/pkg/fcrmessages"
 
 	"github.com/ConsenSys/fc-retrieval-provider-admin/internal/settings"
 	"github.com/ConsenSys/fc-retrieval-provider-admin/internal/providerapi"
@@ -47,52 +48,52 @@ type ActiveProvider struct {
 
 // NewProviderManager returns an initialised instance of the provider manager.
 func NewProviderManager(settings settings.ClientSettings) *ProviderManager {
-	g := ProviderManager{}
-	g.settings = settings
-	g.providerManagerRunner()
-	return &g
+	p := ProviderManager{}
+	p.settings = settings
+	p.providerManagerRunner()
+	return &p
 }
 
 // TODO this should be in a go routine and loop for ever.
-func (g *ProviderManager) providerManagerRunner() {
+func (p *ProviderManager) providerManagerRunner() {
 	logging.Info("Provider Manager: Management thread started")
 
 	// Call this once each hour or maybe day.
-	providers, err := register.GetRegisteredProviders(g.settings.RegisterURL())
+	providers, err := register.GetRegisteredProviders(p.settings.RegisterURL())
 	if err != nil {
 		logging.Error("Unable to get registered providers: %v", err)
 	}
-	g.RegisteredProviders = providers
+	p.RegisteredProviders = providers
 
 	// TODO this loop is where the managing of providers that the client is using happens.
 	logging.Info("Provider Manager: GetProviders returned %d providers", len(providers))
 	for _, provider := range providers {
 		logging.Info("Setting-up comms with: %+v", provider)
-		comms, err := providerapi.NewProviderAPIComms(&provider, &g.settings)
+		comms, err := providerapi.NewProviderAPIComms(&provider, &p.settings)
 		if err != nil {
 			panic(err)
 		}
 
 		activeProvider := ActiveProvider{provider, comms}
-		g.providers = append(g.providers, activeProvider)
+		p.providers = append(p.providers, activeProvider)
 	}
 
-	logging.Info("Provider Manager using %d providers", len(g.providers))
+	logging.Info("Provider Manager using %d providers", len(p.providers))
 }
 
 // BlockProvider adds a host to disallowed list of providers
-func (g *ProviderManager) BlockProvider(hostName string) {
+func (p *ProviderManager) BlockProvider(hostName string) {
 	// TODO
 }
 
 // UnblockProvider add a host to allowed list of providers
-func (g *ProviderManager) UnblockProvider(hostName string) {
+func (p *ProviderManager) UnblockProvider(hostName string) {
 	// TODO
 
 }
 
 // FindOffersStandardDiscovery finds offers using the standard discovery mechanism.
-// func (g *ProviderManager) FindOffersStandardDiscovery(contentID *cid.ContentID) ([]cidoffer.CidGroupOffer, error) {
+// func (p *ProviderManager) FindOffersStandardDiscovery(contentID *cid.ContentID) ([]cidoffer.CidGroupOffer, error) {
 // 	if len(g.providers) == 0 {
 // 		return nil, fmt.Errorf("No providers available")
 // 	}
@@ -113,9 +114,9 @@ func (g *ProviderManager) UnblockProvider(hostName string) {
 
 // GetConnectedProviders returns the list of domain names of providers that the client
 // is currently connected to.
-func (g *ProviderManager) GetConnectedProviders() []string {
-	urls := make([]string, len(g.providers))
-	for i, provider := range g.providers {
+func (p *ProviderManager) GetConnectedProviders() []string {
+	urls := make([]string, len(p.providers))
+	for i, provider := range p.providers {
 		urls[i] = provider.comms.ApiURL
 	}
 	return urls
@@ -123,6 +124,11 @@ func (g *ProviderManager) GetConnectedProviders() []string {
 
 // Shutdown stops go routines and closes sockets. This should be called as part
 // of the graceful library shutdown
-func (g *ProviderManager) Shutdown() {
+func (p *ProviderManager) Shutdown() {
 	// TODO
+}
+
+// SendMessage send message to providers
+func (p *ProviderManager) SendMessage(message *fcrmessages.FCRMessage) {
+	// TODO Send message
 }

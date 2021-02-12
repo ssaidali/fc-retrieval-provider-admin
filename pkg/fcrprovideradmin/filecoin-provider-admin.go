@@ -19,7 +19,7 @@ import (
 	"github.com/ConsenSys/fc-retrieval-provider-admin/internal/control"
 	"github.com/ConsenSys/fc-retrieval-provider-admin/internal/settings"
 	log "github.com/ConsenSys/fc-retrieval-gateway/pkg/logging"
-	// "github.com/ConsenSys/fc-retrieval-gateway/pkg/nodeid"
+	"github.com/ConsenSys/fc-retrieval-gateway/pkg/fcrmessages"
 )
 
 // FilecoinRetrievalProviderAdminClient holds information about the interaction of
@@ -64,4 +64,10 @@ func (c *FilecoinRetrievalProviderAdminClient) startUp(conf Settings) {
 func (c *FilecoinRetrievalProviderAdminClient) Shutdown() {
 	log.Info("Filecoin Retrieval Provider Admin Client shutting down")
 	c.providerManager.Shutdown()
+}
+
+// SendMessage send message to providers
+func (c *FilecoinRetrievalProviderAdminClient) SendMessage(message *fcrmessages.FCRMessage) {
+	log.Info("Filecoin Retrieval Provider Admin Client sending message")
+	c.providerManager.SendMessage(message)
 }
